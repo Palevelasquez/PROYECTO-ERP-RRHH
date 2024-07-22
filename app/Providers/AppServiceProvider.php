@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
-
+use App\Services\GoogleSheetsService;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -14,7 +14,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton(GoogleSheetsService::class, function ($app) {
+            return new GoogleSheetsService();
+        });
     }
 
     /**

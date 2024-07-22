@@ -52,6 +52,11 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
         ],
+        
+        'local_pdfs' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/pdfs'),
+        ],
 
     ],
 
@@ -69,5 +74,4 @@ return [
     'links' => [
         public_path('storage') => storage_path('app/public'),
     ],
-
 ];

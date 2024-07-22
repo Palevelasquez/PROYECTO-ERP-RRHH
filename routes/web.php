@@ -2,35 +2,45 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmpleadoController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\DocumentController;
+use Illuminate\Support\Facades\Auth; // Asegúrate de importar Auth
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+| Aquí es donde puede registrar rutas web para la aplicación. Estas
+| rutas son cargadas por RouteServiceProvider dentro de un grupo que
+| contiene el grupo de middleware "web". ¡Ahora crea algo genial!
 |
 */
 
 Route::get('/', function () {
     return view('auth.login');
 });
+
 /*
-// *llamar a la vista por medio de una funcion
 Route::get('/empleado', function () {
     return view('empleado.index');
 });
-// llamar a la vista por medio de clases
-Route::get('empleado/create',[EmpleadoController::class, 'create']);
-*/
-Route::resource('empleado',EmpleadoController::class)->middleware('auth');
 
-Auth::routes(['register'=>false,'reset'=>false]);
+Route::get('empleado/create',[EmpleadoController::class,'create'] );
+*/
+Route::get('/chart', [ChartController::class, 'index'])->name('chart.index');
+Route::get('/documents', [DocumentController::class, 'index'])->name('documents.index');
+Route::post('/documents/import', [DocumentController::class, 'import'])->name('documents.import');
+Route::get('/documents/export/{empleado}', [DocumentController::class, 'export'])->name('documents.export');
+Route::post('/documents/export-to-sheets', [DocumentController::class, 'exportToSheets'])->name('documents.exportToSheets');
+Route::resource('empleado', EmpleadoController::class)->middleware('auth');
+Route::get('/documents/download', [DocumentController::class, 'download'])->name('documents.download');
+Auth::routes();
+
+//Auth::routes(['register'=>false,'reset'=>false]);
 
 Route::get('/home', [EmpleadoController::class, 'index'])->name('home');
 
-Route::group(['middleware' => 'auth'], function(){
+Route::group(['middleware' => 'auth'], function () {
     Route::get('/', [EmpleadoController::class, 'index'])->name('home');
 });

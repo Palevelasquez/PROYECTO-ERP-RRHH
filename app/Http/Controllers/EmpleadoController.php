@@ -14,11 +14,10 @@ class EmpleadoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $datos['empleados'] = Empleado::paginate(3);
-        
-        return view('empleado.index', $datos);
-    }
+{
+    $empleados = Empleado::paginate(20); // Cambiar de all() a paginate(20)
+    return view('empleado.index', compact('empleados'));
+}
 
     /**
      * Show the form for creating a new resource.
