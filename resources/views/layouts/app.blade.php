@@ -11,7 +11,6 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -19,107 +18,126 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <style>
-        /* Estilos personalizados para la barra de menú */
-        .sidebar {
-            width: 250px;
-            transition: width 0.3s;
-        }
-        .sidebar.minimized {
-            width: 80px;
-        }
-        .sidebar .nav-link {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .sidebar .nav-link i {
-            margin-right: 8px;
-        }
-        .sidebar.minimized .nav-link i {
-            margin-right: 0;
-        }
-        .sidebar .nav-item {
-            display: flex;
-            align-items: center;
-        }
-    </style>
 </head>
 <body>
+    @auth
     <div class="d-flex">
-        <nav class="flex-column bg-white shadow-sm p-3 sidebar" id="sidebar">
-            <!-- Botón para minimizar la barra de menú -->
-            <button class="btn btn-primary mb-3" id="toggleSidebar">Minimizar</button>
-            
-            <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'SISBIANCA') }}
-            </a>
-
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('empleado.index') }}">
-                        <i class="fas fa-users"></i>{{ __('Empleados') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('documents.index') }}">
-                        <i class="fas fa-file-alt"></i>Documentos
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('chart.index') }}">
-                        <i class="fas fa-chart-bar"></i>Gráficos
-                    </a>
-                </li>
-            </ul>
-
-            <ul class="nav flex-column mt-auto">
-                @guest
-                    @if (Route::has('login'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">
-                                <i class="fas fa-sign-in-alt"></i>{{ __('Login') }}
-                            </a>
-                        </li>
-                    @endif
-
-                    @if (Route::has('register'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">
-                                <i class="fas fa-user-plus"></i>{{ __('Register') }}
-                            </a>
-                        </li>
-                    @endif
-                @else
-                    <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            <i class="fas fa-user"></i>{{ Auth::user()->name }}
+        <!-- Sidebar for authenticated users -->
+        <nav class="sidebar">
+            <!-- Toggle button -->
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <span class="toggle-icon">&#9776;</span>
+            </button>
+            <!-- Sidebar content -->
+            <div class="sidebar-content">
+                <a class="navbar-brand text-white" href="{{ url('/') }}">
+                    {{ config('app.name', 'SISBIANCA') }}
+                </a>
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="employeesToggle">
+                            <span class="icon">👥</span> Empleados
                         </a>
-
+                        <ul class="sub-nav" id="employeesSubmenu">
+                            <li><a class="sub-nav-link" href="{{ route('empleado.index') }}">Lista de Empleados</a></li>
+                            <li><a class="sub-nav-link" href="#">Historial de Empleados</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="documentsToggle">
+                            <span class="icon">📄</span> Documentos
+                        </a>
+                        <ul class="sub-nav" id="documentsSubmenu">
+                            <li><a class="sub-nav-link" href="{{ route('documents.index') }}">Agregar Documento</a></li>
+                            <li><a class="sub-nav-link" href="{{ route('documents.download') }}">Descargar Documentos</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="reportsToggle">
+                            <span class="icon">📊</span> Reportes
+                        </a>
+                        <ul class="sub-nav" id="reportsSubmenu">
+                            <li><a class="sub-nav-link" href="#">Reporte Financiero</a></li>
+                            <li><a class="sub-nav-link" href="#">Reporte de Rendimiento</a></li>
+                            <li><a class="sub-nav-link" href="#">Reporte de Asistencia</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav mt-auto">
+                    <li class="nav-item dropdown">
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            {{ Auth::user()->name }}
+                        </a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault();
                                              document.getElementById('logout-form').submit();">
                                 {{ __('Logout') }}
                             </a>
-
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                 @csrf
                             </form>
                         </div>
                     </li>
-                @endguest
-            </ul>
+                </ul>
+            </div>
         </nav>
 
-        <div class="flex-grow-1 p-3">
+        <!-- Main content area -->
+        <div class="main-content">
             @yield('content')
         </div>
     </div>
+    @else
+    <div class="main-container" style="display: flex; height: 100vh;">
+        <!-- Left section -->
+        <div class="left-side" style="flex: 1; background-color: #154360; color: white; padding: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <h1>Bienvenido a SISBIANCA</h1>
+            <p>¡Tu solución integral para la gestión de empleados!</p>
+            <img src="{{ asset('images/pngegg.png') }}" alt="Imagen bonita" style="max-width: 50%; height: auto;">
+        </div>
+
+        <!-- Right section -->
+        <div class="right-side" style="flex: 1; background-color: #f5f5f5; padding: 20px; display: flex; justify-content: center; align-items: center;">
+            <div class="login-container">
+                <div class="login-box">
+                    <h2>Iniciar sesión</h2>
+                    <form method="POST" action="{{ route('login') }}">
+                        @csrf
+                        <div class="input-group">
+                            <input type="email" name="email" required>
+                            <label>Correo electrónico</label>
+                        </div>
+                        <div class="input-group">
+                            <input type="password" name="password" required>
+                            <label>Contraseña</label>
+                        </div>
+                        <button type="submit" class="btn-login">Iniciar sesión</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endauth
 
     <script>
-        document.getElementById('toggleSidebar').addEventListener('click', function() {
-            document.getElementById('sidebar').classList.toggle('minimized');
+        // Toggle sidebar visibility
+        const toggleButton = document.getElementById('sidebarToggle');
+        const sidebar = document.querySelector('.sidebar');
+
+        toggleButton.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+        });
+
+        // Toggle subsections
+        document.querySelectorAll('.nav-item > .nav-link').forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                const submenuId = this.id.replace('Toggle', 'Submenu');
+                const submenu = document.getElementById(submenuId);
+                submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
+                this.parentElement.classList.toggle('active');
+            });
         });
     </script>
 </body>

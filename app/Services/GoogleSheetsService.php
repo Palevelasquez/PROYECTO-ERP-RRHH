@@ -36,11 +36,13 @@ class GoogleSheetsService
     public function updateValues($spreadsheetId, $range, $values)
     {
         $body = new Google_Service_Sheets_ValueRange([
+            'range' => $range,
             'values' => $values
         ]);
         $params = [
             'valueInputOption' => 'RAW'
         ];
-        return $this->service->spreadsheets_values->update($spreadsheetId, $range, $body, $params);
+        $result = $this->service->spreadsheets_values->update($spreadsheetId, $range, $body, $params);
+        return $result;
     }
 }

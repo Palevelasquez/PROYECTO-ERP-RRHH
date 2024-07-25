@@ -5,20 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Empleado extends Model
+class Document extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'Nombre',
-        'ApellidoPaterno',
-        'ApellidoMaterno',
-        'Correo',
-        'Foto',
+        'empleado_id',
+        'type',
+        'file_path',
     ];
 
-    public function documents()
+    public function empleado()
     {
-        return $this->hasMany(Document::class, 'empleado_id');
+        return $this->belongsTo(Empleado::class, 'empleado_id');
     }
 }

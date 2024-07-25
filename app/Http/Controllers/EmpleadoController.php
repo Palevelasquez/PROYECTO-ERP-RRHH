@@ -2,152 +2,72 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Empleado;
+use App\Models\Empleado; // Asegúrate de que el modelo esté correctamente importado
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class EmpleadoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
-{
-    $empleados = Empleado::paginate(20); // Cambiar de all() a paginate(20)
-    return view('empleado.index', compact('empleados'));
-}
+    {
+        $empleados = Empleado::all(); // Recupera todos los empleados
+        return view('Empleado.index', compact('empleados')); // Muestra la vista
+    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        return view('empleado.create');
+        return view('Empleado.create'); // Muestra el formulario para agregar un nuevo empleado
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        // validar campos vacios
-        $campos=[
-            'Nombres'=>'required|string|max:100',
-            'Apellidos'=>'required|string|max:100',
-            'Area'=>'required|string|max:100',
-            'Correo'=>'required|string|max:100',
-            'Foto'=>'required|max:10000|mimes:jpeg,png,jpg',
-        ];
-        $mensaje=[
-            'required'=>'El :attribute es requerido',
-            'Foto.required'=>'La foto es requerida'
-        ];
+        // Validar los datos del formulario
+        $request->validate([
+            'Nombre' => 'required|string|max:255',
+        'ApellidoPaterno' => 'required|string|max:255',
+        'ApellidoMaterno' => 'nullable|string|max:255',
+        'Correo' => 'required|email|max:255',
+        'cargo' => 'required|string|max:255', // Validar el campo cargo
+        'Foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-        $this->validate($request, $campos, $mensaje);
+        $empleado = new Empleado();
+        $empleado->Nombre = $request->Nombre;
+        $empleado->ApellidoPaterno = $request->ApellidoPaterno;
+        $empleado->ApellidoMaterno = $request->ApellidoMaterno;
+        $empleado->Correo = $request->Correo;
+        $empleado->cargo = $request->cargo; // Asignar el valor del campo cargo
+        
 
-        // 
-        $datosEmpleado = request()->except('_token');
-        if($request->hasFile('Foto')){
-            $datosEmpleado['Foto']=$request->file('Foto')->store('uploads','public');
+        // Subir la foto si se proporciona
+        if ($request->hasFile('Foto')) {
+            $foto = $request->file('Foto')->store('public/fotos');
+            $empleado->Foto = basename($foto);
         }
-        Empleado::insert($datosEmpleado);
-        return redirect('empleado')->with('mensaje','Empleado agregado con exito');
-        // return response()->json($datosEmpleado);
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Empleado  $empleado
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Empleado $empleado)
-    {
-        //
-    }
+        $empleado->save(); // Guardar el nuevo empleado en la base de datos
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Empleado  $empleado
-     * @return \Illuminate\Http\Response
-     */
+        return redirect()->route('empleado.index')->with('success', 'Empleado agregado correctamente');
+      }
     public function edit($id)
     {
-        $empleado=Empleado::findOrFail($id);
-        return view('empleado.edit', compact('empleado'));
+    $empleado = Empleado::findOrFail($id);
+    return view('Empleado.edit', compact('empleado'));
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Empleado  $empleado
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
-    {   
-        
-        // validar campos vacios
-        $campos=[
-            'Nombres'=>'required|string|max:100',
-            'Apellidos'=>'required|string|max:100',
-            'Area'=>'required|string|max:100',
-            'Correo'=>'required|string|max:100',
-        ];
-        $mensaje=[
-            'required'=>'El :attribute es requerido',
-        ];
-
-        if ($request->hasFile('Foto')) {
-            $campos=['Foto'=>'required|max:10000|mimes:jpeg,png,jpg',];
-            $mensaje=['Foto.required'=>'La foto es requerida'];
-        }
-
-        $this->validate($request, $campos, $mensaje);
-
-        // 
-        
-        //recepciono los datos a excecion de token y method
-        $datosEmpleado = request()->except('_token','_method');
-        
-        if($request->hasFile('Foto')){
-            $empleado=Empleado::findOrFail($id);
-            Storage::delete('public/'.$empleado->Foto);
-            $datosEmpleado['Foto']=$request->file('Foto')->store('uploads','public');
-        }
-
-        // actualizo los datos cuando el id = al id de mi basedeDatos
-        Empleado::where('id','=',$id)->update($datosEmpleado);
-        // recepciono el id nuevamnete
-        $empleado=Empleado::findOrFail($id);
-        // retorno a la vista edit de
-        // return view('empleado.edit', compact('empleado'));
-        return redirect('empleado')->with('mensaje', 'Registro Actualizado');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Empleado  $empleado
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
     {
-        $empleado=Empleado::findOrFail($id);
+    $empleado = Empleado::findOrFail($id);
+    $empleado->update($request->all());
 
-        if (Storage::delete('public/'.$empleado->Foto)) {
-            Empleado::destroy($id);
-        }
+    // Manejo de la foto si es necesario
 
-        
-        return redirect('empleado')->with('mensaje', 'Registro Eliminado');
-    }
+    return redirect()->route('empleado.index')->with('success', 'Empleado actualizado correctamente.');
+    } 
+    public function destroy($id)
+{
+    $empleado = Empleado::findOrFail($id);
+    $empleado->delete();
+
+    return redirect()->route('empleado.index')->with('success', 'Empleado eliminado correctamente.');
+}
+
 }
