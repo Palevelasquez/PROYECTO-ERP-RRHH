@@ -11252,4 +11252,17 @@ width: 80px; /* Ajusta el tamaño cuando está colapsada */
   .main-content {
       margin-left: 0;
   }
+  .btn-export {
+    background-color: #007bff; /* Color de fondo */
+    color: #ffffff; /* Color del texto */
+    border: none; /* Sin borde */
+    padding: 5px 10px; /* Espaciado interno */
+    font-size: 14px; /* Tamaño de fuente */
+    border-radius: 4px; /* Bordes redondeados */
+    text-decoration: none; /* Sin subrayado */
+}
+.btn-export:hover {
+  background-color: #0056b3; /* Color de fondo al pasar el ratón */
+  color: #ffffff; /* Color del texto */
+}
 }

@@ -48,26 +48,49 @@ class EmpleadoController extends Controller
 
         return redirect()->route('empleado.index')->with('success', 'Empleado agregado correctamente');
       }
+
     public function edit($id)
     {
-    $empleado = Empleado::findOrFail($id);
-    return view('Empleado.edit', compact('empleado'));
+        $empleado = Empleado::find($id);
+        return view('empleados.edit', compact('empleado'));
+    
     }
+
+
     public function update(Request $request, $id)
-    {
-    $empleado = Empleado::findOrFail($id);
-    $empleado->update($request->all());
+{
+    $request->validate([
+        'Nombre' => 'required|string|max:255',
+        'ApellidoPaterno' => 'required|string|max:255',
+        'ApellidoMaterno' => 'nullable|string|max:255',
+        'Correo' => 'required|email|max:255',
+        'Cargo' => 'required|string|max:255', // Validar el campo cargo
+    ]);
 
-    // Manejo de la foto si es necesario
+    $empleado = Empleado::find($id);
 
-    return redirect()->route('empleado.index')->with('success', 'Empleado actualizado correctamente.');
-    } 
+    if (!$empleado) {
+        return redirect()->route('empleados.index')->with('error', 'Empleado no encontrado.');
+    }
+
+    $empleado->Nombre = $request->input('Nombre');
+    $empleado->ApellidoPaterno = $request->input('ApellidoPaterno');
+    $empleado->ApellidoMaterno = $request->input('ApellidoMaterno');
+    $empleado->Correo = $request->input('Correo');
+    $empleado->Cargo = $request->input('Cargo');
+
+    $empleado->save(); // Guardar los cambios
+
+    return redirect()->route('empleados.index')->with('success', 'Empleado actualizado correctamente.');
+}
+
+    
     public function destroy($id)
 {
     $empleado = Empleado::findOrFail($id);
     $empleado->delete();
 
-    return redirect()->route('empleado.index')->with('success', 'Empleado eliminado correctamente.');
+    return redirect()->route('empleados.index')->with('success', 'Empleado eliminado correctamente.');
 }
 
 }

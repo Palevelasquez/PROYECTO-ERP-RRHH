@@ -8,7 +8,7 @@
                 Nuevo Empleado
             </div>
             <div class="card-body">
-                <form action="{{ route('empleado.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('empleados.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <label for="Nombre">Nombre</label>

@@ -1,8 +1,11 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -18,6 +21,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    
 </head>
 <body>
     @auth
@@ -39,7 +43,7 @@
                             <span class="icon">👥</span> Empleados
                         </a>
                         <ul class="sub-nav" id="employeesSubmenu">
-                            <li><a class="sub-nav-link" href="{{ route('empleado.index') }}">Lista de Empleados</a></li>
+                            <li><a class="sub-nav-link" href="{{ route('empleados.index') }}">Lista de Empleados</a></li>
                             <li><a class="sub-nav-link" href="#">Historial de Empleados</a></li>
                         </ul>
                     </li>
@@ -86,6 +90,11 @@
         <!-- Main content area -->
         <div class="main-content">
             @yield('content')
+            <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         </div>
     </div>
     @else

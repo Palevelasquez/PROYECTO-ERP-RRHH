@@ -11,7 +11,7 @@
     <div class="container">
         <h1>Editar Empleado</h1>
 
-        <form action="{{ route('empleado.update', $empleado->id) }}" method="POST">
+        <form action="{{ route('empleados.update', $empleado->id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="form-group">
