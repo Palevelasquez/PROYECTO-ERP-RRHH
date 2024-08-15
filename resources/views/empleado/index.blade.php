@@ -1,13 +1,16 @@
-@extends('layouts.app')
+@extends('adminlte::page')
 
 @section('content')
     <div class="container mt-4">
         <h1 class="mb-4">Lista de Empleados</h1>
-        <a href="{{ route('empleados.create') }}" class="btn btn-success mb-3">Agregar Nuevo Empleado</a>
+        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+            Agregar un nuevo empleado
+        </button>
         <div class="card">
             <div class="card-header bg-primary text-white">
                 Empleados
             </div>
+            
             <div class="card-body">
                 <table class="table table-striped">
                     <thead class="table-dark">
@@ -29,7 +32,47 @@
                                         <a href="#" data-toggle="modal" data-target="#modal{{ $empleado->id }}">
                                             <img src="{{ asset('storage/fotos/' . $empleado->Foto) }}" alt="Foto" class="img-thumbnail rounded-circle" width="40">
                                         </a>
-
+<!-- Modal AGREGAR NUEVO EMPLEADO-->
+<div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addEmployeeModalLabel">Agregar un nuevo empleado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addEmployeeForm" method="POST" action="{{ route('empleados.store') }}" enctype="multipart/form-data">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="Nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="Nombre" name="Nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ApellidoPaterno" class="form-label">Apellido Paterno</label>
+                        <input type="text" class="form-control" id="ApellidoPaterno" name="ApellidoPaterno" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ApellidoMaterno" class="form-label">Apellido Materno</label>
+                        <input type="text" class="form-control" id="ApellidoMaterno" name="ApellidoMaterno" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Correo" class="form-label">Correo</label>
+                        <input type="email" class="form-control" id="Correo" name="Correo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cargo" class="form-label">Cargo</label>
+                        <input type="text" class="form-control" id="cargo" name="cargo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="Foto" class="form-label">Foto</label>
+                        <input type="file" class="form-control" id="Foto" name="Foto">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
                                         <!-- Modal -->
                                         <div class="modal fade" id="modal{{ $empleado->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-centered">
@@ -118,6 +161,7 @@
     </div>
 </div>
 @endforeach
+{{ $empleados->links() }}
 @if(session('success'))
     <div class="alert alert-success">
         {{ session('success') }}

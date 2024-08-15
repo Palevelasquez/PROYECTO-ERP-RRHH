@@ -9,8 +9,8 @@ class EmpleadoController extends Controller
 {
     public function index()
     {
-        $empleados = Empleado::all(); // Recupera todos los empleados
-        return view('Empleado.index', compact('empleados')); // Muestra la vista
+        $empleados = Empleado::paginate(20);
+        return view('empleado.index', compact('empleados'));
     }
 
     public function create()
@@ -46,9 +46,10 @@ class EmpleadoController extends Controller
 
         $empleado->save(); // Guardar el nuevo empleado en la base de datos
 
-        return redirect()->route('empleado.index')->with('success', 'Empleado agregado correctamente');
+        return redirect()->route('empleados.index')->with('success', 'Empleado agregado correctamente');
       }
 
+    
     public function edit($id)
     {
         $empleado = Empleado::find($id);
@@ -92,5 +93,23 @@ class EmpleadoController extends Controller
 
     return redirect()->route('empleados.index')->with('success', 'Empleado eliminado correctamente.');
 }
+public function search(Request $request)
+{
+    $query = $request->get('q');
 
+    // Buscar empleados según el término de búsqueda
+    $empleados = Empleado::where('Nombre', 'LIKE', "%{$query}%")
+        ->orWhere('ApellidoPaterno', 'LIKE', "%{$query}%")
+        ->get(['id', 'Nombre', 'ApellidoPaterno']);
+
+    return response()->json([
+        'items' => $empleados->map(function ($empleado) {
+            return [
+                'id' => $empleado->id,
+                'text' => $empleado->Nombre . ' ' . $empleado->ApellidoPaterno
+            ];
+        })
+    ]);
+
+}
 }

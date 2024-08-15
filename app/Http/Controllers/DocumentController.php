@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Services\GoogleSheetsService;
 use ZipArchive;
+use Illuminate\Support\Facades\Log;
+use ZipStream\ZipStream;
 
 
 class DocumentController extends Controller
@@ -70,49 +72,63 @@ class DocumentController extends Controller
     
         return back()->with('success', 'Documento importado exitosamente.');
     }
+
     public function download(Request $request)
-    {
-        $request->validate([
-            'empleado_id_download' => 'required|exists:empleados,id',
-            'type_download' => 'required|in:all,contract,signature',
-        ]);
+{
+    // Obtén la lista de IDs de los documentos a descargar
+    $documentIds = $request->input('document_ids');
 
-        $empleado = Empleado::findOrFail($request->empleado_id_download);
-
-        $query = $empleado->documents();
-
-        if ($request->type_download !== 'all') {
-            $query->where('type', $request->type_download);
-        }
-
-        $documents = $query->get();
-
-        $zip = new ZipArchive();
-        $zipFileName = 'documents_' . $empleado->id . '.zip';
-        $zipFilePath = storage_path('app/public/' . $zipFileName);
-
-        if ($zip->open($zipFilePath, ZipArchive::CREATE) === TRUE) {
-            foreach ($documents as $document) {
-                $filePath = storage_path('app/public/' . $document->file_path);
-
-                // Verificar si el archivo existe antes de agregarlo al ZIP
-                if (file_exists($filePath)) {
-                    $zip->addFile($filePath, basename($filePath));
-                } else {
-                    return back()->with('error', 'El archivo ' . basename($filePath) . ' no se encuentra.');
-                }
-            }
-            $zip->close();
-        } else {
-            return back()->with('error', 'No se pudo crear el archivo ZIP.');
-        }
-
-        return response()->download($zipFilePath);
+    // Asegúrate de que la lista de documentos no está vacía
+    if (empty($documentIds)) {
+        return back()->with('error', 'No se seleccionaron documentos.');
     }
+
+    // Ruta donde se almacenan los documentos
+    $basePath = storage_path('app/public/pdfs');
+
+    foreach ($documentIds as $documentId) {
+        // Encuentra el documento en la base de datos
+        $document = Document::find($documentId);
+
+        // Verifica si el documento existe
+        if ($document) {
+            // Construye la ruta completa del archivo
+            $filePath = $basePath . '/' . $document->file_path;
+
+            // Verifica si el archivo existe
+            if (file_exists($filePath)) {
+                // Devuelve el archivo como descarga
+                return response()->download($filePath);
+            } else {
+                // Registra un error si el archivo no se encuentra
+                Log::error("El archivo no existe: {$filePath}");
+            }
+        } else {
+            return back()->with('error', 'Documento no encontrado.');
+        }
+    }
+
+    return back()->with('error', 'Ocurrió un problema al intentar descargar el documento.');
+}
 
     public function showDownloadForm()
     {
         $empleados = Empleado::all();
         return view('documents.download', compact('empleados'));
+    }
+
+    public function getDocumentsByEmployee(Request $request, $empleado_id)
+    {
+        $documents = Document::where('empleado_id', $empleado_id)->get();
+        return response()->json($documents);
+    }
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $employees = Empleado::where('Nombre', 'LIKE', "%$query%")
+            ->orWhere('ApellidoPaterno', 'LIKE', "%$query%")
+            ->get();
+    
+        return response()->json($employees);
     }
 }   

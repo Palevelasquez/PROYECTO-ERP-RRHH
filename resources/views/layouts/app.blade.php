@@ -1,27 +1,28 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'SISBIANCA') }}</title>
-
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    
+     <!-- Required meta tags -->
+     <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+     <!-- Fonts -->
+     <link rel="dns-prefetch" href="//fonts.gstatic.com">
+     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+ 
+     <!-- Bootstrap CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+ 
+     <!-- Select2 CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+ 
+     <!-- CSRF Token -->
+     <meta name="csrf-token" content="{{ csrf_token() }}">
+ 
+     <title>{{ config('app.name', 'SIS BIANCA') }}</title>
+ 
+     <!-- Styles -->
+     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     @auth
@@ -34,7 +35,7 @@
             </button>
             <!-- Sidebar content -->
             <div class="sidebar-content">
-                <a class="navbar-brand text-white" href="{{ url('/') }}">
+                <a class="navbar-brand text-white" href="{{ route('dashboard') }}">
                     {{ config('app.name', 'SISBIANCA') }}
                 </a>
                 <ul class="nav">
@@ -86,23 +87,24 @@
                 </ul>
             </div>
         </nav>
-
+        
         <!-- Main content area -->
         <div class="main-content">
             @yield('content')
             <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        </div>
-    </div>
+            <!-- jQuery first -->
+            <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+            <!-- Bootstrap JS -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            <!-- Select2 JS -->
+            <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+            
     @else
     <div class="main-container" style="display: flex; height: 100vh;">
         <!-- Left section -->
         <div class="left-side" style="flex: 1; background-color: #154360; color: white; padding: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-            <h1>Bienvenido a SISBIANCA</h1>
-            <p>¡Tu solución integral para la gestión de empleados!</p>
+            <h1>SISBIANCA</h1>
+            <p>¡Tu solución integral para la gestión de leads!</p>
             <img src="{{ asset('images/pngegg.png') }}" alt="Imagen bonita" style="max-width: 50%; height: auto;">
         </div>
 
@@ -114,8 +116,8 @@
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
                         <div class="input-group">
-                            <input type="email" name="email" required>
-                            <label>Correo electrónico</label>
+                            <input type="text" name="email" required>
+                            <label>Usuario</label>
                         </div>
                         <div class="input-group">
                             <input type="password" name="password" required>

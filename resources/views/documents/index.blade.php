@@ -1,5 +1,5 @@
 <!-- resources/views/documents/index.blade.php -->
-@extends('layouts.app')
+@extends('adminlte::page')
 
 @section('content')
 <div class="container">

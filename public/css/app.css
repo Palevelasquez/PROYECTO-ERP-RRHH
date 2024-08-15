@@ -5380,6 +5380,8 @@ textarea.form-control-lg {
   border-bottom: var(--bs-modal-header-border-width) solid var(--bs-modal-header-border-color);
   border-top-left-radius: var(--bs-modal-inner-border-radius);
   border-top-right-radius: var(--bs-modal-inner-border-radius);
+  background-color: #2CB649;
+  color: white;
 }
 .modal-header .btn-close {
   padding: calc(var(--bs-modal-header-padding-y) * 0.5) calc(var(--bs-modal-header-padding-x) * 0.5);
@@ -11265,4 +11267,5 @@ width: 80px; /* Ajusta el tamaño cuando está colapsada */
   background-color: #0056b3; /* Color de fondo al pasar el ratón */
   color: #ffffff; /* Color del texto */
 }
+
 }
