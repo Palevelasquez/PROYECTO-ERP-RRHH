@@ -11267,5 +11267,11 @@ width: 80px; /* Ajusta el tamaño cuando está colapsada */
   background-color: #0056b3; /* Color de fondo al pasar el ratón */
   color: #ffffff; /* Color del texto */
 }
+/* resources/css/app.css */
+.custom-left {
+  margin-right: auto; /* Ajusta el margen derecho para moverlo hacia la izquierda */
+}
 
+.custom-position {
+  margin-left: 20px; /* Ajusta según sea necesario */
 }

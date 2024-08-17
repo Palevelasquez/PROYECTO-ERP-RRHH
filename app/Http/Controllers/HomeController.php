@@ -24,7 +24,10 @@ class HomeController extends Controller
      */
      public function index(){
          
-        $sliders = Slider::all();
-         return view('welcome',compact('sliders'));   
+        $theme = session()->get('theme', 'light'); // Obtén el tema de la sesión o usa 'light' como valor por defecto
+
+        //$sliders = Slider::all();
+         //return view('welcome',compact('sliders'));   
+         return view('web.admin.index', compact('theme'));;
     }
 }

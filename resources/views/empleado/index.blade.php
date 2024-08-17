@@ -1,5 +1,29 @@
 @extends('adminlte::page')
 
+@section('title', 'Empleados')
+
+
+
+@section('styles')
+    <style>
+        .navbar-custom {
+            background-color: #f8f9fa; /* Color de fondo personalizado */
+            border-bottom: 1px solid #e3e3e3; /* Borde inferior para separación */
+        }
+
+        .navbar-custom .navbar-nav {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .navbar-custom .nav-item {
+            margin-right: 20px; /* Espacio entre los elementos de navegación */
+        }
+    </style>
+@endsection
+
+
+
 @section('content')
     <div class="container mt-4">
         <h1 class="mb-4">Lista de Empleados</h1>
@@ -119,7 +143,8 @@
                             </tr>
                         @endforeach
                         <!-- Modal de edición -->
-<!-- Modal de edición -->
+
+                        <!-- Modal de edición -->
 @foreach($empleados as $empleado)
 <div class="modal fade" id="editModal-{{ $empleado->id }}" tabindex="-1" aria-labelledby="editModalLabel-{{ $empleado->id }}" aria-hidden="true">
     <div class="modal-dialog">

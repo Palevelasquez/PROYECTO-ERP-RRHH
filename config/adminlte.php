@@ -138,8 +138,8 @@ return [
     'usermenu_header_class' => 'bg-primary',
     'usermenu_image' => true,
     'usermenu_desc' => true,
-    'usermenu_profile_url' => true,
-
+    'usermenu_profile_url' => true ,
+    'usermenu_profile_url' => 'users.index',
     /*
     |--------------------------------------------------------------------------
     | Layout
@@ -157,7 +157,7 @@ return [
     'layout_fixed_sidebar' => true,
     'layout_fixed_navbar' => null,
     'layout_fixed_footer' => null,
-    'layout_dark_mode' => null,
+    'layout_dark_mode' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -298,8 +298,8 @@ return [
         [
             'type' => 'navbar-search',
             'text' => 'search',
-            'topnav_right' => true,
-        ],
+            'topnav_right' => false,
+        ],  
         [
             'type' => 'fullscreen-widget',
             'topnav_right' => true,
@@ -308,7 +308,7 @@ return [
         // Sidebar items:
         [
             'type' => 'sidebar-menu-search',
-            'text' => 'search',
+            'text' => 'Buscar',
         ],
         [
             'text' => 'blog',
@@ -316,8 +316,26 @@ return [
             'can' => 'manage-blog',
         ],
         [
-            'text' => 'Empleados',
-            'route' => 'empleados.index',
+            'header' => 'EMPLEADOS',
+            'icon' => 'fas fa-users',
+        ],
+        [
+                    'text' => 'Lista de Empleados',
+                    'route' => 'empleados.index',
+                    'icon' => 'fas fa-table',
+        ],
+        [
+                    'text' => 'Departamentos',
+                    'route' => 'departments.index',
+                    'topnav' => true,
+                    'classes' => 'custom-position',        
+                    'visible' => function () {
+                    return request()->routeIs('empleados.index');
+                },
+        ],
+        [
+            'header' => 'DOCUMENTOS',
+            'icon' => 'fas fa-users',
         ],
         [
             'text' => 'Documentos',
@@ -334,26 +352,21 @@ return [
             ],
         ],
         [
+            'header' => 'CONFIGURACIÓN DE NOTICIAS',
+            'icon' => 'fas fa-users',
+],
+        [
             'text' => 'NoticiasConf',
+            'icon' => 'fas fa-tachometer-alt',
             'url' => 'admin/slide',
         ],
+        ['header' => 'CONFIGURACIÓN DE CUENTAS'],
         [
-            'text' => 'pages',
-            'url' => 'admin/pages',
-            'icon' => 'far fa-fw fa-file',
-            'label' => 4,
-            'label_color' => 'success',
-        ],
-        ['header' => 'account_settings'],
-        [
-            'text' => 'profile',
-            'route' => 'index',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'change_password',
-            'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
+            'text' => 'Usuarios',
+            'route' => 'users.index',
+            'icon' => 'fas fa-users',
+            'can' =>'manage-users',
+            
         ],
         [
             'text' => 'multilevel',

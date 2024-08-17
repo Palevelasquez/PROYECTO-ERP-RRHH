@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Empleado; // Asegúrate de que el modelo esté correctamente importado
 use Illuminate\Http\Request;
+use App\Models\Department;
+
 
 class EmpleadoController extends Controller
 {
     public function index()
     {
         $empleados = Empleado::paginate(20);
-        return view('empleado.index', compact('empleados'));
+        $departments = Department::all(); // Obtener todos los departamentos
+        return view('empleado.index', compact('empleados', 'departments')); // Pasar los departamentos a la vista
     }
 
     public function create()

@@ -17,6 +17,7 @@ class Empleado extends Model
         'Correo',
         'Foto',
         'cargo', // Asegúrate de incluir todos los campos necesarios
+        'department_id'
     ];
 
     // Definir los campos que no deberían ser rellenables
@@ -26,4 +27,10 @@ class Empleado extends Model
      {
          return $this->hasMany(Document::class, 'empleado_id');
      }
+     
+     public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+
 }

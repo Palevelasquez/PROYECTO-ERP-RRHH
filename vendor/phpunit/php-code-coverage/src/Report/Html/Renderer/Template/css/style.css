@@ -156,3 +156,7 @@ table + .structure-heading {
 .not-coverable {
  background-color: #fcf8e3;
 }
+.custom-menu-item {
+    margin-right: auto; /* Ajusta este valor según sea necesario */
+    margin-left: 10px;  /* Ajusta este valor para moverlo hacia la izquierda */
+}
