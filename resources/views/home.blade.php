@@ -2,6 +2,8 @@
 
 @section('title', 'Home')
 
+@section('puglins.sweetalert2', true)
+
 @section('content_header')
     <h1 class="display-4">Bienvenido al Dashboard</h1>
     <p class="lead">Aquí encontrarás las últimas noticias y actualizaciones importantes.</p>
@@ -93,8 +95,11 @@
 @stop
 
 @section('js')
-    <script> console.log('Hi!'); </script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    Swal.fire({
+            title: "Good job!",
+        text: "You clicked the button!",
+        icon: "success"
+    });
+  </script>
 @stop

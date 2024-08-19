@@ -66,7 +66,11 @@
 @stop
 
 @section('js')
-    <script>
-        console.log('Dashboard page loaded.');
-    </script>
+<script>
+    Swal.fire(
+        'Good job!',
+        'You clicked the button!',
+        'success'
+    )
+  </script>
 @stop

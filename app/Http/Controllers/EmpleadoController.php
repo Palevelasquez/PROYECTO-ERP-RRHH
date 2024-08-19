@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Empleado; // Asegúrate de que el modelo esté correctamente importado
 use Illuminate\Http\Request;
 use App\Models\Department;
+use Yajra\DataTables\DataTables;
 
 
 class EmpleadoController extends Controller
 {
     public function index()
     {
-        $empleados = Empleado::paginate(20);
+        $empleados = Empleado::paginate();
         $departments = Department::all(); // Obtener todos los departamentos
         return view('empleado.index', compact('empleados', 'departments')); // Pasar los departamentos a la vista
     }
